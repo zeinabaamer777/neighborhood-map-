@@ -51,6 +51,7 @@ var modelLocation = [{
 
 
 var Cofe = function(data) {
+	console.log(data);  
 	var self = this;
 	self.title = data.title;
 	self.lat = data.lat;
@@ -78,7 +79,7 @@ var Cofe = function(data) {
 
             
             
-	$.getJSON('https://api.foursquare.com/v2/venues/explore?ll=' + '&query=' + self.title + ',' + self.lat + ',' + self.lng + ',' + '&limit=30&client_id=0Z5CLW5WEVJCHJZIBRFRI4E0SBMVQXYA1KRS44ZQNKHOQEMW&client_secret=YAAR5XQXDKZ1SLCGJ0DCEOXH2MYHHXOURY0QCUWJP4BBY133&v=20161016').done(function(data) {
+	$.getJSON('https://api.foursquare.com/v2/venues/explore?ll='+ self.lat + ',' + self.lng + ',' + '&query=' + self.title + ',' + '&limit=30&client_id=0Z5CLW5WEVJCHJZIBRFRI4E0SBMVQXYA1KRS44ZQNKHOQEMW&client_secret=YAAR5XQXDKZ1SLCGJ0DCEOXH2MYHHXOURY0QCUWJP4BBY133&v=20161016').done(function(data) {
 		var lists = data.response.venues[0];
 		self.URL = lists.url;
 		self.street = lists.location.formattedAddress[0];

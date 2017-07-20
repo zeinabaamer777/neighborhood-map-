@@ -6,7 +6,7 @@ var CLIENT_ID = "0Z5CLW5WEVJCHJZIBRFRI4E0SBMVQXYA1KRS44ZQNKHOQEMW";
 var CLIENT_SECRET = "YAAR5XQXDKZ1SLCGJ0DCEOXH2MYHHXOURY0QCUWJP4BBY133";
 // declare our model locations 
 var modelLocation = [{
-	title: 'diamond Cafe',
+	title: 'الماسة',
 	location: {
 		lat: 30.481559,
 		lng: 30.481559
@@ -60,6 +60,32 @@ var Cofe = function(data) {
 	self.street="";
 	self.city = "";
 	self.visible = ko.observable(true);
+	$.getJSON('https://api.foursquare.com/v2/venues/search?ll='+ self.lat + ',' + self.lng + ',' + '&query=' + self.title + ',' + '&limit=30&client_id=0Z5CLW5WEVJCHJZIBRFRI4E0SBMVQXYA1KRS44ZQNKHOQEMW&client_secret=YAAR5XQXDKZ1SLCGJ0DCEOXH2MYHHXOURY0QCUWJP4BBY133&v=20161016')
+		.done(function(data) {
+			var lists = data.response.venues[0];
+			self.URL = lists.url;
+			self.street = lists.location.formattedAddress[0];
+	     	self.city = lists.location.formattedAddress[1];
+	     	this.extrContent = self.URL + self.street + self.city ;
+	     	this.getContent = '<div class="window-content"><div class="title"><h3>' + data.title + "</b></div>" + '<div><a target="_blank" href="' + self.URL + '">' + self.URL + "</a></div>" + '<div class="extrContent">' + this.extrContent;
+
+
+		         	// Get contect infowindows
+			self.marker.addListener('click', function() {
+				this.getContent = '<div class="window-content"><div class="title"><h3>' + data.title + "</b></div>" + '<div class="foursquareURL"><a target="_blank" href="' + self.URL + '">' + self.URL + "</a></div>" + '<div class="extrContent">' + this.extrContent;
+					return getContent;	
+			
+			    	// declare info window
+				this.infoWindow = new google.maps.InfoWindow({
+					content: self.getContent
+				});
+				self.infoWindow.setContent(this.getContent);
+				self.infoWindow.open(map,this);
+			    // set marker animation 
+				self.marker.setAnimation(google.maps.Animation.DROP);
+
+			});
+	});
 	// add and show markers
 	self.marker = new google.maps.Marker({
 		position: new google.maps.LatLng(data.lat, data.lng),
@@ -79,31 +105,7 @@ var Cofe = function(data) {
 
             
             
-	$.getJSON('https://api.foursquare.com/v2/venues/search?ll='+ self.lat + ',' + self.lng + ',' + '&query=' + self.title + ',' + '&limit=30&client_id=0Z5CLW5WEVJCHJZIBRFRI4E0SBMVQXYA1KRS44ZQNKHOQEMW&client_secret=YAAR5XQXDKZ1SLCGJ0DCEOXH2MYHHXOURY0QCUWJP4BBY133&v=20161016').done(function(data) {
-		var lists = data.response.venues[0];
-		self.URL = lists.url;
-		self.street = lists.location.formattedAddress[0];
-     	self.city = lists.location.formattedAddress[1];
-     	var extrContent = self.URL + self.street + self.city ;
-     	var getContent = '<div class="window-content"><div class="title"><h3>' + data.title + "</b></div>" + '<div><a target="_blank" href="' + self.URL + '">' + self.URL + "</a></div>" + '<div class="extrContent">' + extrContent;
 
-
-	         	// Get contect infowindows
-		self.marker.addListener('click', function() {
-			this.getContent = '<div class="window-content"><div class="title"><h3>' + data.title + "</b></div>" + '<div class="foursquareURL"><a target="_blank" href="' + self.URL + '">' + self.URL + "</a></div>" + '<div class="extrContent">' + self.street + "</div>" + '<div class="extrContent">' + self.city + "</div>" + '<div class="extrContent">' + self.phone + " </div></div>";
-				return getContent;	
-		
-		    	// declare info window
-			this.infoWindow = new google.maps.InfoWindow({
-				content: self.getContent
-			});
-			self.infoWindow.setContent(this.getContent);
-			self.infoWindow.open(map,this);
-		    // set marker animation 
-			self.marker.setAnimation(google.maps.Animation.DROP);
-
-		});
-	});
 
 	// declare foursquaresite to get data
 	// //json call

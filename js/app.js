@@ -1,14 +1,8 @@
 // declare our main & global variables
 var map;
-var marker = [];
+// var marker = [];
 // declare our model locations 
 var modelLocation = [{
-	title: 'الماسة',
-	location: {
-		lat: 30.481559,
-		lng: 30.481559
-	}
-}, {
 	title: 'we lessa yama cafe',
 	location: {
 		lat: 30.474411,
@@ -45,79 +39,68 @@ var modelLocation = [{
 		lng: 32.271835
 	}
 }, ];
-
-
 var Cofe = function(data) {
-	console.log(data);  
-	var self = this;
-	self.title = data.title;
-    self.lat = data.location.lat;
-    self.lng = data.location.lng;
-	self.URL = "";
-	self.street="";
-	self.city = "";
-	self.visible = ko.observable(true);
-	$.getJSON('https://api.foursquare.com/v2/venues/search?ll='+ self.lat + ',' + self.lng + ',' + '&query=' + self.title + ',' + '&limit=30&client_id=0Z5CLW5WEVJCHJZIBRFRI4E0SBMVQXYA1KRS44ZQNKHOQEMW&client_secret=YAAR5XQXDKZ1SLCGJ0DCEOXH2MYHHXOURY0QCUWJP4BBY133&v=20161016')
-		.done(function(data) {
+		console.log(data);
+		var self = this;
+		self.title = data.title;
+		self.lat = data.location.lat;
+		self.lng = data.location.lng;
+		self.URL = "";
+		self.street = "";
+		self.city = "";
+		self.visible = ko.observable(true);
+		$.getJSON('https://api.foursquare.com/v2/venues/search?ll=' + self.lat + ',' + self.lng + ',' + '&query=' + self.title + ',' + '&limit=30&client_id=0Z5CLW5WEVJCHJZIBRFRI4E0SBMVQXYA1KRS44ZQNKHOQEMW&client_secret=YAAR5XQXDKZ1SLCGJ0DCEOXH2MYHHXOURY0QCUWJP4BBY133&v=20161016').done(function(data) {
+			console.log(self.title, data)
 			var lists = data.response.venues[0];
 			self.URL = lists.url;
 			self.street = lists.location.formattedAddress[0];
-	     	self.city = lists.location.formattedAddress[1];
-	     	this.extrContent = self.URL + self.street + self.city ;
-	     	this.getContent = '<div class="window-content"><div class="title"><h3>' + data.title + "</b></div>" + '<div><a target="_blank" href="' + self.URL + '">' + self.URL + "</a></div>" + '<div class="extrContent">' + this.extrContent;
+			self.city = lists.location.formattedAddress[1];
+			this.extrContent = self.URL + self.street + self.city;
+			this.getContent = '<div class="window-content"><div class="title"><h3>' + data.title + "</b></div>" + '<div><a target="_blank" href="' + self.URL + '">' + self.URL + "</a></div>" + '<div class="extrContent">' + this.extrContent;
+		});
 
-
-		         	// Get contect infowindows
-			self.marker.addListener('click', function() {
-				this.getContent = '<div class="window-content"><div class="title"><h3>' + data.title + "</b></div>" + '<div class="foursquareURL"><a target="_blank" href="' + self.URL + '">' + self.URL + "</a></div>" + '<div class="extrContent">' + this.extrContent;
-					return getContent;	
-			
-			    	// declare info window
-				this.infoWindow = new google.maps.InfoWindow({
-					content: self.getContent
-				});
-				self.infoWindow.setContent(this.getContent);
-				self.infoWindow.open(map,this);
-			    // set marker animation 
-				self.marker.setAnimation(google.maps.Animation.DROP);
-
+        this.getContent = '<div class="window-content"><div class="title"><h3>' + data.title + "</b></div>" + '<div><a target="_blank" href="' + self.URL + '">' + self.URL + "</a></div>" + '<div class="extrContent">' + this.extrContent;
+	    this.infoWindow = new google.maps.InfoWindow({content: self.getContent});
+		// add and show markers
+		self.marker = new google.maps.Marker({
+			position: new google.maps.LatLng(data.location.lat, data.location.lng),
+			map: map,
+			title: data.location.title,
+		});
+		self.showMarker = ko.computed(function() {
+			if (self.visible() === true) {
+				self.marker.setMap(map);
+			} else {
+				self.marker.setMap(null);
+			}
+			return true;
+		}, self);
+		// Get contect infowindows
+		self.marker.addListener('click', function() {
+			self.getContent = '<div class="window-content"><div class="title"><h3>' + data.title + "</b></div>" + '<div class="foursquareURL"><a target="_blank" href="' + self.URL + '">' + self.URL + "</a></div>" + '<div class="extrContent">' + this.extrContent;
+			return getContent;
+			// declare info window
+			self.infoWindow = new google.maps.InfoWindow({
+				content: self.getContent
 			});
-	});
-	// add and show markers
-	self.marker = new google.maps.Marker({
-		position: new google.maps.LatLng(data.lat, data.lng),
-		map: map,
-		title: data.title,
-	});
-	self.showMarker = ko.computed(function() {
-		if (self.visible() === true) {
-			self.marker.setMap(map);
-		} else {
-			self.marker.setMap(null);
-		}
-		return true;
-	}, self);
-    
-    // url: 'https://api.foursquare.com/v2/venues/explore?ll=' + '&query=' + self.title + ',' + self.lat + ',' + self.lng + ',' + '&limit=30&client_id=0Z5CLW5WEVJCHJZIBRFRI4E0SBMVQXYA1KRS44ZQNKHOQEMW&client_secret=YAAR5XQXDKZ1SLCGJ0DCEOXH2MYHHXOURY0QCUWJP4BBY133&v=20161016',
-
-            
-            
-
-
-	// declare foursquaresite to get data
-	// //json call
- //    $.getJSON('https://api.foursquare.com/v2/venues/search?ll=' + '&query=' + self.title + ',' + self.lat + ',' + self.lng + ',' +'&client_id=0Z5CLW5WEVJCHJZIBRFRI4E0SBMVQXYA1KRS44ZQNKHOQEMW'+'&client_secret=YAAR5XQXDKZ1SLCGJ0DCEOXH2MYHHXOURY0QCUWJP4BBY133'+'&v=20161016').done(function(data) {
- //         $.each(data.response.venues, function(i,venues){
-	//         self.URL = venues.url;
-	// 		self.street = venues.location.formattedAddress[0];
-	//      	self.city = venues.location.formattedAddress[1];
-	//       	self.phone = venues.location.phone;
-	//     })
- //    });
-
-}
-
-/* ----------------------------- model part ----------------*/
+			self.infoWindow.setContent(this.getContent);
+			self.infoWindow.open(map, this);
+			// set marker animation 
+			self.marker.setAnimation(google.maps.Animation.DROP);
+		});
+		// url: 'https://api.foursquare.com/v2/venues/explore?ll=' + '&query=' + self.title + ',' + self.lat + ',' + self.lng + ',' + '&limit=30&client_id=0Z5CLW5WEVJCHJZIBRFRI4E0SBMVQXYA1KRS44ZQNKHOQEMW&client_secret=YAAR5XQXDKZ1SLCGJ0DCEOXH2MYHHXOURY0QCUWJP4BBY133&v=20161016',
+		// declare foursquaresite to get data
+		// //json call
+		//    $.getJSON('https://api.foursquare.com/v2/venues/search?ll=' + '&query=' + self.title + ',' + self.lat + ',' + self.lng + ',' +'&client_id=0Z5CLW5WEVJCHJZIBRFRI4E0SBMVQXYA1KRS44ZQNKHOQEMW'+'&client_secret=YAAR5XQXDKZ1SLCGJ0DCEOXH2MYHHXOURY0QCUWJP4BBY133'+'&v=20161016').done(function(data) {
+		//         $.each(data.response.venues, function(i,venues){
+		//         self.URL = venues.url;
+		// 		self.street = venues.location.formattedAddress[0];
+		//      	self.city = venues.location.formattedAddress[1];
+		//       	self.phone = venues.location.phone;
+		//     })
+		//    });
+	}
+	/* ----------------------------- model part ----------------*/
 var viewCoffeModel = function() {
 	var self = this;
 	this.searchItem = ko.observable("");

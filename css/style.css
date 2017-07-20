@@ -1,0 +1,19 @@
+/* Our Base */
+@font-face{src:url(../fonts/RobotoLight.ttf);font-family: RobotoLight;font-weight: 2000; font-size:100;} 
+@font-face{font-family: vevey; src:url(../fonts/vevey.ttf);font-weight: normal;} 
+
+* { Box-sizing: Border-box ; -webkit-box-sizing: border-box; -moz-box-sizing: border-box;} 
+
+ol, ul,a ,li {list-style: none;text-decoration:none;}
+
+body{padding: 0px;margin: 0;}
+li {-webkit-transition: all .3s ease-in 0s;-moz-transition: all .3s ease-in 0s;-ms-transition: all .3s ease-in 0s;-o-transition: all .3s ease-in 0s;transition: all .3s ease-in 0s;}
+.container{ background-color:#ece8dd}
+.header {background-color: #a0785c;padding-bottom: 10px;}
+.header-title{
+  color: #38c3ea;font-weight: bold;font-family: vevey;font-size: 1.2em;letter-spacing: .15em;text-shadow: #CCC 1px 0 10px;text-transform: uppercase; line-height: 1em;
+}
+.search-box
+{color: #38c3ea;background-color: #ece8dd; padding-left: 5px; padding-right: 50px;margin-top: 15px;margin-left: 50%; border-radius: 7px;font-weight: bolder;font-family: RobotoLight;font-size: 1.2em;letter-spacing: .15em;line-height: 3em;}
+.search input::-webkit-input-placeholder {color: #38c3ea;}
+#map {overflow: hidden;position: relative; padding: 0;margin: 0;margin-top:30px; background-color: #fff; text-align: center;height: 600px;}

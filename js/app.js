@@ -1,8 +1,14 @@
 // declare our main & global variables
 var map;
 // var marker = [];
-// declare our model locations 
+// declare our model locations  
 var modelLocation = [{
+	title: 'cavello cafe',
+	location: {
+		lat: 30.473895,
+		lng: 31.177214
+	}
+},{
 	title: 'we lessa yama cafe',
 	location: {
 		lat: 30.474411,
@@ -55,17 +61,17 @@ var Cofe = function(data) {
 			self.URL = lists.url;
 			self.street = lists.location.formattedAddress[0];
 			self.city = lists.location.formattedAddress[1];
-			this.extrContent = self.URL + self.street + self.city;
-			this.getContent = '<div class="window-content"><div class="title"><h3>' + data.title + "</b></div>" + '<div><a target="_blank" href="' + self.URL + '">' + self.URL + "</a></div>" + '<div class="extrContent">' + this.extrContent;
+			self.extrContent = self.URL + self.street + self.city;
+			self.getContent = '<div class="window-content"><div class="title"><h3>' + data.title + "</b></div>" + '<div><a target="_blank" href="' + self.URL + '">' + self.URL + "</a></div>" + '<div class="extrContent">' + this.extrContent+"</div>";
 		});
 
-        this.getContent = '<div class="window-content"><div class="title"><h3>' + data.title + "</b></div>" + '<div><a target="_blank" href="' + self.URL + '">' + self.URL + "</a></div>" + '<div class="extrContent">' + this.extrContent;
-	    this.infoWindow = new google.maps.InfoWindow({content: self.getContent});
+        self.getContent = '<div class="window-content"><div class="title"><h3>' + data.title + "</b></div>" + '<div><a target="_blank" href="' + self.URL + '">' + self.URL + "</a></div>" + '<div class="extrContent">' + this.extrContent+"</div>";
+	    self.infoWindow = new google.maps.InfoWindow({content: self.getContent});
 		// add and show markers
 		self.marker = new google.maps.Marker({
 			position: new google.maps.LatLng(data.location.lat, data.location.lng),
 			map: map,
-			title: data.location.title,
+			title: data.title,
 		});
 		self.showMarker = ko.computed(function() {
 			if (self.visible() === true) {
@@ -77,8 +83,7 @@ var Cofe = function(data) {
 		}, self);
 		// Get contect infowindows
 		self.marker.addListener('click', function() {
-			self.getContent = '<div class="window-content"><div class="title"><h3>' + data.title + "</b></div>" + '<div class="foursquareURL"><a target="_blank" href="' + self.URL + '">' + self.URL + "</a></div>" + '<div class="extrContent">' + this.extrContent;
-			return getContent;
+			// self.getContent = '<div class="window-content"><div class="title"><h3>' + data.title + "</b></div>" + '<div class="foursquareURL"><a target="_blank" href="' + self.URL + '">' + self.URL + "</a></div>" + '<div class="extrContent">' + self.extrContent;
 			// declare info window
 			self.infoWindow = new google.maps.InfoWindow({
 				content: self.getContent
@@ -105,10 +110,10 @@ var viewCoffeModel = function() {
 	var self = this;
 	this.searchItem = ko.observable("");
 	map = new google.maps.Map(document.getElementById('map'), {
-		zoom: 12,
+		zoom: 8,
 		center: {
-			lat: 30.465993,
-			lng: 31.184831
+			lat: 30.4659929,
+			lng: 31.18483070000002
 		},
 		mapTypeControlOptions: {
 			style: google.maps.MapTypeControlStyle.DROPDOWN_MENU

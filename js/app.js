@@ -54,8 +54,8 @@ var Cofe = function(data) {
 	console.log(data);  
 	var self = this;
 	self.title = data.title;
-	self.lat = data.lat;
-	self.lng = data.lng;
+    self.lat = data.location.lat;
+    self.lng = data.location.lng;
 	self.URL = "";
 	self.street="";
 	self.city = "";

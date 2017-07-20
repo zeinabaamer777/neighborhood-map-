@@ -1,9 +1,6 @@
 // declare our main & global variables
 var map;
 var marker = [];
-// Foursquare APIs
-var CLIENT_ID = "0Z5CLW5WEVJCHJZIBRFRI4E0SBMVQXYA1KRS44ZQNKHOQEMW";
-var CLIENT_SECRET = "YAAR5XQXDKZ1SLCGJ0DCEOXH2MYHHXOURY0QCUWJP4BBY133";
 // declare our model locations 
 var modelLocation = [{
 	title: 'الماسة',

@@ -54,18 +54,25 @@ var Cofe = function(data) {
 		self.URL = "";
 		self.street = "";
 		self.city = "";
+		self.checkinsCount ="";
 		self.visible = ko.observable(true);
-		$.getJSON('https://api.foursquare.com/v2/venues/search?ll=' + self.lat + ',' + self.lng + ',' + '&query=' + self.title + ',' + '&limit=30&client_id=0Z5CLW5WEVJCHJZIBRFRI4E0SBMVQXYA1KRS44ZQNKHOQEMW&client_secret=YAAR5XQXDKZ1SLCGJ0DCEOXH2MYHHXOURY0QCUWJP4BBY133&v=20161016').done(function(data) {
+
+
+// 
+		$.getJSON('https://api.foursquare.com/v2/venues/search?ll=' 
+ 			+ self.lat + ',' + self.lng + ',' + '&query=' + self.title 
+			+ ',' + '&limit=30&client_id=0Z5CLW5WEVJCHJZIBRFRI4E0SBMVQXYA1KRS44ZQNKHOQEMW&client_secret=YAAR5XQXDKZ1SLCGJ0DCEOXH2MYHHXOURY0QCUWJP4BBY133&v=20161016').done(function(data){
 			console.log(self.title, data)
 			var lists = data.response.venues[0];
 			self.URL = lists.url;
 			self.street = lists.location.formattedAddress[0];
 			self.city = lists.location.formattedAddress[1];
-			self.extrContent = self.URL + self.street + self.city;
-			self.getContent = '<div class="window-content"><div class="title"><h3>' + data.title + "</b></div>" + '<div><a target="_blank" href="' + self.URL + '">' + self.URL + "</a></div>" + '<div class="extrContent">' + this.extrContent+"</div>";
+			self.checkinsCount = lists.stats;
+			self.extrContent = self.URL + self.street + self.city +self.checkinsCount;
+			self.getContent = '<div class="window-content"><div class="title"><h3>' + self.title + "</b></div>" + '<div><a href="' + self.URL + '">' + self.URL + "</a></div>" + '<div class="extrContent">' + this.extrContent+"</div>";
 		});
 
-        self.getContent = '<div class="window-content"><div class="title"><h3>' + data.title + "</b></div>" + '<div><a target="_blank" href="' + self.URL + '">' + self.URL + "</a></div>" + '<div class="extrContent">' + this.extrContent+"</div>";
+        self.getContent = '<div class="window-content"><div class="title"><h3>' + self.title + "</b></div>" + '<div><a href="' + self.URL + '">' + self.URL + "</a></div>" + '<div class="extrContent">' + this.extrContent+"</div>";
 	    self.infoWindow = new google.maps.InfoWindow({content: self.getContent});
 		// add and show markers
 		self.marker = new google.maps.Marker({
@@ -88,7 +95,7 @@ var Cofe = function(data) {
 			self.infoWindow = new google.maps.InfoWindow({
 				content: self.getContent
 			});
-			self.infoWindow.setContent(this.getContent);
+			self.infoWindow.setContent(self.getContent);
 			self.infoWindow.open(map, this);
 			// set marker animation 
 			self.marker.setAnimation(google.maps.Animation.DROP);
@@ -104,11 +111,11 @@ var Cofe = function(data) {
 		//       	self.phone = venues.location.phone;
 		//     })
 		//    });
-	}
+	};
 	/* ----------------------------- model part ----------------*/
 var viewCoffeModel = function() {
 	var self = this;
-	this.searchItem = ko.observable("");
+	self.searchItem = ko.observable("");
 	map = new google.maps.Map(document.getElementById('map'), {
 		zoom: 8,
 		center: {
@@ -119,14 +126,14 @@ var viewCoffeModel = function() {
 			style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
 		}
 	});
-	this.cofeeList = ko.observableArray([]);
+	self.cofeeList = ko.observableArray([]);
 	modelLocation.forEach(function(cofeeItem) {
 		// body...
 		self.cofeeList.push(new Cofe(cofeeItem));
 	});
 	this.filteredCofee = ko.computed(function() {
 		var search = self.searchItem();
-		if (search === null) {
+		if (search === '') {
 			self.cofeeList().forEach(function(cofeeItem) {
 				cofeeItem.visible(true);
 			});

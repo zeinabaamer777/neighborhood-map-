@@ -46,7 +46,7 @@ var modelLocation = [{
 	}
 }, ];
 var Cofe = function(data) {
-		console.log(data);
+		// console.log(data);
 		var self = this;
 		self.title = data.title;
 		self.lat = data.location.lat;
@@ -64,8 +64,9 @@ var Cofe = function(data) {
 //   &v=YYYYMMDD
 //   &m=foursquare
         // JSON request and response 
-		$.getJSON('https://api.foursquare.com/v2/venues/search?&ll='+ self.lat + ',' + self.lng + ',' + '&query=' + self.title + ',' + '&client_id=0Z5CLW5WEVJCHJZIBRFRI4E0SBMVQXYA1KRS44ZQNKHOQEMW&client_secret=YAAR5XQXDKZ1SLCGJ0DCEOXH2MYHHXOURY0QCUWJP4BBY133&v=20161016&m=foursquare',function(data){
-		console.log(self.title, data);
+		$.getJSON('https://api.foursquare.com/v2/venues/40a55d80f964a52020f31ee3?client_id=0Z5CLW5WEVJCHJZIBRFRI4E0SBMVQXYA1KRS44ZQNKHOQEMW&client_secret=YAAR5XQXDKZ1SLCGJ0DCEOXH2MYHHXOURY0QCUWJP4BBY133&v=20161016',function(data){
+		// console.log(self.title, data);
+		console.log(data);
          $.each(data.response.venues, function(i,venues){
 	        // self.URL = venues.url;
 	        self.lat = venues.location.lat;

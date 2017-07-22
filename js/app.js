@@ -64,7 +64,7 @@ var Cofe = function(data) {
 //   &v=YYYYMMDD
 //   &m=foursquare
         // JSON request and response 
-		$.getJSON('https://api.foursquare.com/v2/venues/search?ll='+ self.lat + ',' + self.lng + ',' + '&query=' + self.title + ',' + '&client_id=0Z5CLW5WEVJCHJZIBRFRI4E0SBMVQXYA1KRS44ZQNKHOQEMW&client_secret=YAAR5XQXDKZ1SLCGJ0DCEOXH2MYHHXOURY0QCUWJP4BBY133&v=20161016&m=foursquare',function(data){
+		$.getJSON('https://api.foursquare.com/v2/venues/search?&ll='+ self.lat + ',' + self.lng + ',' + '&query=' + self.title + ',' + '&client_id=0Z5CLW5WEVJCHJZIBRFRI4E0SBMVQXYA1KRS44ZQNKHOQEMW&client_secret=YAAR5XQXDKZ1SLCGJ0DCEOXH2MYHHXOURY0QCUWJP4BBY133&v=20161016&m=foursquare',function(data){
 		console.log(self.title, data);
          $.each(data.response.venues, function(i,venues){
 	        // self.URL = venues.url;
@@ -73,6 +73,7 @@ var Cofe = function(data) {
 			self.street = venues.location.formattedAddress[0];
 	     	self.city = venues.location.formattedAddress[1];
 	     	self.checkinsCount = venues.stats.checkinsCount;
+	     	// self.hereNow = venues.count.hereNow;
 	      	// self.phone = venues.Cofe.phone;
 	    });
 			// self.extrContent =  self.street + self.city +self.checkinsCount;
@@ -144,6 +145,10 @@ var viewCoffeModel = function() {
 		}
 	}, self);
 	self.currentCofee = ko.observable(this.cofeeList[0]);
+	    // this function handle action on list to make the info window appera
+	self.clickHandler = function (cofeeList) {
+		google.maps.event.trigger(cofeeList.marker, 'click');
+	};
 }
 // start map that draw map, through taking an object from coffeModel
 function startMap() {

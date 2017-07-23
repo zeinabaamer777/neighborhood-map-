@@ -3,48 +3,61 @@ var map;
 // var marker = [];
 // declare our model locations 
 var modelLocation = [{
-	title: 'cavello cafe',
+	title: 'espresso lab',
+	// id: "57f91e60498e0e907a965499",
 	location: {
-		lat: 30.473895,
-		lng: 31.177214
+		lat: 30.020943,
+		lng: 31.494939
 	}
 },{
-	title: 'we lessa yama cafe',
+	title: 'Brazilian Coffee Stores',
 	location: {
-		lat: 30.474411,
-		lng: 31.177381
+		lat: 29.954711,
+		lng: 31.262176
 	}
 }, {
-	title: 'El Gouna Coffee Shop',
+	title: 'Starbucks',
 	location: {
-		lat: 27.408790,
-		lng: 33.677226
+		lat: 29.954711,
+		lng: 31.262176
 	}
 }, {
-	title: 'Muslem Coffee',
+	title: 'Caffé Greco',
 	location: {
-		lat: 30.471193,
-		lng: 31.177211
+		lat: 29.955704,
+		lng: 31.261489
 	}
 }, {
-	title: 'SunCity',
+	title: 'Pickn Go',
 	location: {
-		lat: 30.470441,
-		lng: 31.177356
+		lat: 31.228638,
+		lng: 29.944885
 	}
 }, {
-	title: 'Lebnan cafe',
+	title: 'Zainab Khatoon',
 	location: {
-		lat: 29.970702,
-		lng: 31.247586
+		lat: 30.044704,
+		lng: 31.263250
 	}
 }, {
-	title: 'El Zaeem',
+	title: 'Tres Bon',
 	location: {
-		lat: 30.597304,
-		lng: 32.271835
+		lat: 30.094931,
+		lng: 31.320931
 	}
-}, ];
+},{
+	title: 'El Fishawy ',
+	location: {
+		lat: 30.047407,
+		lng: 31.262301
+	}
+},{
+	title: 'Bi Café',
+	location: {
+		lat: 31.033088,
+		lng: 31.357357
+	}
+},  ]; 
 var Cofe = function(data) {
 		// console.log(data);
 		var self = this;
@@ -64,7 +77,7 @@ var Cofe = function(data) {
 //   &v=YYYYMMDD
 //   &m=foursquare
         // JSON request and response 
-		$.getJSON('https://api.foursquare.com/v2/venues/40a55d80f964a52020f31ee3?client_id=0Z5CLW5WEVJCHJZIBRFRI4E0SBMVQXYA1KRS44ZQNKHOQEMW&client_secret=YAAR5XQXDKZ1SLCGJ0DCEOXH2MYHHXOURY0QCUWJP4BBY133&v=20161016',function(data){
+		$.getJSON('https://api.foursquare.com/v2/venues/search?ll='+ self.lat + ',' + self.lng + ',' + '&query=' + self.title + ',' + '&client_id=0Z5CLW5WEVJCHJZIBRFRI4E0SBMVQXYA1KRS44ZQNKHOQEMW&client_secret=YAAR5XQXDKZ1SLCGJ0DCEOXH2MYHHXOURY0QCUWJP4BBY133&v=20161016&m=foursquare',function(data){
 		// console.log(self.title, data);
 		console.log(data);
          $.each(data.response.venues, function(i,venues){
@@ -74,6 +87,11 @@ var Cofe = function(data) {
 			self.street = venues.location.formattedAddress[0];
 	     	self.city = venues.location.formattedAddress[1];
 	     	self.checkinsCount = venues.stats.checkinsCount;
+		    if (typeof self.city === 'undefined' || typeof self.checkinsCount === 'undefined' || typeof self.street === 'undefined'){
+			  self.city = "";
+			  self.street = "";
+			  self.checkinsCount = "";
+		    }
 	     	// self.hereNow = venues.count.hereNow;
 	      	// self.phone = venues.Cofe.phone;
 	    });
@@ -123,8 +141,8 @@ var viewCoffeModel = function() {
 	map = new google.maps.Map(document.getElementById('map'), {
 		zoom: 8,
 		center: {
-			lat: 30.4659929,
-			lng: 31.18483070000002
+			lat: 30.044420,
+			lng: 31.235712
 		},
 		mapTypeControlOptions: {
 			style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
@@ -136,14 +154,25 @@ var viewCoffeModel = function() {
 		self.cofeeList.push(new Cofe(cofeeItem));
 	});
 	this.filteredCofee = ko.computed(function() {
-		// var search = self.searchItem();
-		var searchFilter = self.searchItem();
-		if (searchFilter === '') {
-			self.cofeeList().forEach(function(cofeeItem) {
-				cofeeItem.visible(true);
-			});
-			return self.cofeeList();
+	    var searchFilter = self.searchItem();
+		if (!searchFilter) {
+			return self.cofeeList();	
 		}
+		// else
+		// {
+		// return ko.utils.arrayFilter(self.cofeeList(), function(cofeeItem) {
+		// // 	// 	var string = locationItem.name.toLowerCase();
+		// // 	// 	var result = (string.search(filter) >= 0);
+		// // 	// 	locationItem.visible(result);
+		// // 	// 	return result;
+		// // 	// });
+		//  	var result = cofeeItem.title.toLowerCase().indexOf(self.search(searchFilter).toLowerCase()) ;
+		//  	if (result > 0) {
+		//  		cofeeItem.visible(true);
+		//  		return result;
+		//  	}
+		// }
+		// }
 	}, self);
 	self.currentCofee = ko.observable(this.cofeeList[0]);
 	    // this function handle action on list to make the info window appera

@@ -161,8 +161,15 @@ var viewCoffeModel = function() {
 		}
 		else {
 			return ko.utils.arrayFilter(self.cofeeList(), function(cofeeItem) {
-				var result = (cofeeItem.title.toLowerCase().search(searchFilter) >= 0) ;
-				return result;
+				var seaRESULT = cofeeItem.title.toLowerCase().search(searchFilter);
+				if(seaRESULT  >= 0) {
+					return true;
+				}
+
+                else{
+                	return false ;
+                }
+				// return seaRESULT;
 			});
 		}
 

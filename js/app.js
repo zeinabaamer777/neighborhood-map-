@@ -10,7 +10,7 @@ var modelLocation = [{
 		lng: 31.494939
 	}
 },{
-	title: 'Brazilian Coffee Stores',
+	title: 'Brazilian Coffee',
 	location: {
 		lat: 29.954711,
 		lng: 31.262176
@@ -149,30 +149,23 @@ var viewCoffeModel = function() {
 		}
 	});
 	self.cofeeList = ko.observableArray([]);
+	// var searchFilter = self.searchItem();
 	modelLocation.forEach(function(cofeeItem) {
 		// body...
 		self.cofeeList.push(new Cofe(cofeeItem));
 	});
 	this.filteredCofee = ko.computed(function() {
 	    var searchFilter = self.searchItem();
-		if (!searchFilter) {
+		if (searchFilter === "") {
 			return self.cofeeList();	
 		}
-		// else
-		// {
-		// return ko.utils.arrayFilter(self.cofeeList(), function(cofeeItem) {
-		// // 	// 	var string = locationItem.name.toLowerCase();
-		// // 	// 	var result = (string.search(filter) >= 0);
-		// // 	// 	locationItem.visible(result);
-		// // 	// 	return result;
-		// // 	// });
-		//  	var result = cofeeItem.title.toLowerCase().indexOf(self.search(searchFilter).toLowerCase()) ;
-		//  	if (result > 0) {
-		//  		cofeeItem.visible(true);
-		//  		return result;
-		//  	}
-		// }
-		// }
+		else {
+			return ko.utils.arrayFilter(self.cofeeList(), function(cofeeItem) {
+				var result = (cofeeItem.title.toLowerCase().search(searchFilter) >= 0) ;
+				return result;
+			});
+		}
+
 	}, self);
 	self.currentCofee = ko.observable(this.cofeeList[0]);
 	    // this function handle action on list to make the info window appera

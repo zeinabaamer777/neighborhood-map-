@@ -123,6 +123,7 @@ var Cofe = function(data) {
 			position: new google.maps.LatLng(data.location.lat, data.location.lng),
 			map: map,
 			title: data.title,
+			animation: google.maps.Animation.DROP,
 		});
 		// function to show markers on map
 		self.showMarker = ko.computed(function() {
@@ -143,8 +144,14 @@ var Cofe = function(data) {
 			self.infoWindow.open(map, this);
 			// set marker animation 
 			self.marker.setAnimation(google.maps.Animation.DROP);
+
 		});
+
+        // self.marker.addListener('click',function(map) {
+        // self.infowindow.close(map, this);
+        // }); 
 	};
+			
 	/* ----------------------------- model part ----------------*/
 var viewCoffeModel = function() {
 	var self = this;

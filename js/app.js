@@ -15,11 +15,17 @@ var modelLocation = [{
 		lat: 29.954711,
 		lng: 31.262176
 	}
+},{
+	title: 'Sea Door',
+	location: {
+		lat: 31.414980,
+		lng: 31.809121
+	}
 }, {
 	title: 'Starbucks',
 	location: {
 		lat: 29.954711,
-		lng: 31.262176
+		lng: 31.262176 
 	}
 }, {
 	title: 'Caffé Greco',
@@ -46,18 +52,24 @@ var modelLocation = [{
 		lng: 31.320931
 	}
 },{
-	title: 'El Fishawy ',
-	location: {
-		lat: 30.047407,
-		lng: 31.262301
-	}
-},{
 	title: 'Bi Café',
 	location: {
 		lat: 31.033088,
 		lng: 31.357357
 	}
-},  ]; 
+},{
+	title: 'Cavally cafe',
+	location: {
+		lat: 30.470441,
+		lng: 31.177356
+	}
+},{
+	title: 'SunCity cafe',
+	location: {
+		lat: 29.962034,
+		lng: 32.548483
+	}
+}, ]; 
 var Cofe = function(data) {
 		// console.log(data);
 		var self = this;
@@ -79,7 +91,7 @@ var Cofe = function(data) {
         // JSON request and response 
 		$.getJSON('https://api.foursquare.com/v2/venues/search?ll='+ self.lat + ',' + self.lng + ',' + '&query=' + self.title + ',' + '&client_id=0Z5CLW5WEVJCHJZIBRFRI4E0SBMVQXYA1KRS44ZQNKHOQEMW&client_secret=YAAR5XQXDKZ1SLCGJ0DCEOXH2MYHHXOURY0QCUWJP4BBY133&v=20161016&m=foursquare',function(data){
 		// console.log(self.title, data);
-		console.log(data);
+		 console.log(data);
          $.each(data.response.venues, function(i,venues){
 	        // self.URL = venues.url;
 	        self.lat = venues.location.lat;
@@ -150,9 +162,9 @@ var viewCoffeModel = function() {
 	});
 	self.cofeeList = ko.observableArray([]);
 	// var searchFilter = self.searchItem();
-	modelLocation.forEach(function(cofeeItem) {
+	modelLocation.forEach(function(Item) {
 		// body...
-		self.cofeeList.push(new Cofe(cofeeItem));
+		self.cofeeList.push(new Cofe(Item));
 	});
 	this.filteredCofee = ko.computed(function() {
 	    var searchFilter = self.searchItem();
@@ -160,8 +172,8 @@ var viewCoffeModel = function() {
 			return self.cofeeList();	
 		}
 		else {
-			return ko.utils.arrayFilter(self.cofeeList(), function(cofeeItem) {
-				var seaRESULT = cofeeItem.title.toLowerCase().search(searchFilter);
+			return ko.utils.arrayFilter(self.cofeeList(), function(Item) {
+				var seaRESULT = Item.title.toLowerCase().search(searchFilter);
 				if(seaRESULT  >= 0) {
 					return true;
 				}

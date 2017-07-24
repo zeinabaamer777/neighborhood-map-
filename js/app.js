@@ -152,6 +152,7 @@ var viewCoffeModel = function() {
 	// define map with a fixed zoom & center 
 	map = new google.maps.Map(document.getElementById('map'), {
 		zoom: 8,
+	    mapTypeId: google.maps.MapTypeId.ROADMAP,
 		center: {
 			lat: 30.044420,
 			lng: 31.235712
@@ -175,6 +176,7 @@ var viewCoffeModel = function() {
 			return ko.utils.arrayFilter(self.cofeeList(), function(Item) {
 				var seaRESULT = Item.title.toLowerCase().search(searchFilter);
 				if(seaRESULT  >= 0) {
+					// console.log(seaRESULT);
 					return true;
 				}
 

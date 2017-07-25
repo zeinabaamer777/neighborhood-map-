@@ -70,6 +70,52 @@
  		lng: 32.548483
  	}
  }, ];
+ /* ----------------------------- map and it's content  part ----------------*/
+ var mapInit = function() {
+ 	var self = this;
+ 	self.searchItem = ko.observable("");
+ 	// define map with a fixed zoom & center 
+ 	map = new google.maps.Map(document.getElementById('map'), {
+ 		zoom: 7,
+ 		mapTypeId: google.maps.MapTypeId.ROADMAP,
+ 		center: {
+ 			lat: 30.044420,
+ 			lng: 31.235712
+ 		},
+ 		mapTypeControlOptions: {
+ 			style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
+ 		}
+ 	});
+
+ 	self.cofeeList = ko.observableArray([]);
+ 	// var searchFilter = self.searchItem();
+ 	modelLocation.forEach(function(Item) {
+ 		// body...
+ 		self.cofeeList.push(new Cofemodel(Item));
+ 	});
+ 	this.filteredCofee = ko.computed(function() {
+ 		var searchFilter = self.searchItem();
+ 		if (searchFilter === "") {
+ 			return self.cofeeList();
+ 		} else {
+ 			return ko.utils.arrayFilter(self.cofeeList(), function(Item) {
+ 				var seaRESULT = Item.title.toLowerCase().search(searchFilter);
+ 				if (seaRESULT >= 0) {
+ 					// console.log(seaRESULT);
+ 					return true;
+ 				} else {
+ 					return false;
+ 				}
+ 				// return seaRESULT;
+ 			});
+ 		}
+ 	}, self);
+ 	self.currentCofee = ko.observable(this.cofeeList[0]);
+ 	// this function handle action on list to make the info window appera
+ 	self.clickHandler = function(cofeeList) {
+ 		google.maps.event.trigger(cofeeList.marker, 'click');
+ 	};
+ }
  var Cofemodel = function(data) {
  	console.log(data);
  	var self = this;
@@ -109,11 +155,10 @@
  		// self.extrContent =  self.street + self.city +self.checkinsCount;
  		// self.getContent = '<div class="window-content" style="background-color:#a0785c;padding:5px;color:#fff;text-transform:uppercase; border-radius:5px;"><div class="title"><h4 style="color:#38c3ea;">' + self.title + "</h4></div>" + '<div class="extrContent"> ( ' + self.lat + ' , ' + self.lng + " ) </div>" + '<div class="extrContent"> city ->' + " " + self.city + "</div>" + '<div class="extrContent"> Street ->' + " " + self.street + "</div>" + '<div class="extrContent">' + self.checkinsCount + " checkins </div></div>";
  	});
- 	self.getContent = '<div class="window-content" style="background-color:#a0785c;padding:5px;color:#fff;text-transform:uppercase; border-radius:5px;"><div class="title"><h4 style="color:#38c3ea;">' + self.title + "</h4></div>" + '<div class="extrContent"> ( ' + self.lat + ' , ' + self.lng + " ) </div>" + '<div class="extrContent"> city ->' + " " + self.city + "</div>" + '<div class="extrContent"> Street ->' + " " + self.street + "</div>" + '<div class="extrContent">' + self.checkinsCount + " checkins </div></div>"; // define infoWindow 
+ 	self.getContent = '<div class="window-content" style="background-color:#4d7b98;padding:5px;color:#fff;text-transform:uppercase; border-radius:5px;"><div class="title"><h4 style="color:#ece8dd;">' + self.title + "</h4></div>" + '<div class="extrContent"> ( ' + self.lat + ' , ' + self.lng + " ) </div>" + '<div class="extrContent"> city ->' + " " + self.city + "</div>" + '<div class="extrContent"> Street ->' + " " + self.street + "</div>" + '<div class="extrContent">' + self.checkinsCount + " checkins </div></div>"; // define infoWindow 
  	self.infoWindow = new google.maps.InfoWindow({
  		content: ''
  	});
- 	
  	google.maps.event.addDomListener(window, 'load', function() {
  		//create markers here
  		self.marker = new google.maps.Marker({
@@ -141,55 +186,10 @@
  		});
  	});
  };
- /* ----------------------------- map and it's content  part ----------------*/
- var mapInit = function() {
- 		var self = this;
- 		self.searchItem = ko.observable("");
- 		// define map with a fixed zoom & center 
- 		map = new google.maps.Map(document.getElementById('map'), {
- 			zoom: 8,
- 			mapTypeId: google.maps.MapTypeId.ROADMAP,
- 			center: {
- 				lat: 30.044420,
- 				lng: 31.235712
- 			},
- 			mapTypeControlOptions: {
- 				style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
- 			}
- 		});
- 		self.cofeeList = ko.observableArray([]);
- 		// var searchFilter = self.searchItem();
- 		modelLocation.forEach(function(Item) {
- 			// body...
- 			self.cofeeList.push(new Cofemodel(Item));
- 		});
- 		this.filteredCofee = ko.computed(function() {
- 			var searchFilter = self.searchItem();
- 			if (searchFilter === "") {
- 				return self.cofeeList();
- 			} else {
- 				return ko.utils.arrayFilter(self.cofeeList(), function(Item) {
- 					var seaRESULT = Item.title.toLowerCase().search(searchFilter);
- 					if (seaRESULT >= 0) {
- 						// console.log(seaRESULT);
- 						return true;
- 					} else {
- 						return false;
- 					}
- 					// return seaRESULT;
- 				});
- 			}
- 		}, self);
- 		self.currentCofee = ko.observable(this.cofeeList[0]);
- 		// this function handle action on list to make the info window appera
- 		self.clickHandler = function(cofeeList) {
- 			google.maps.event.trigger(cofeeList.marker, 'click');
- 		};
- 	}
- 	// ko.applyBindings(new viewCoffeModel());
- 	// var ViewCoffeModel = new viewCoffeModel();
- 	// ko.applyBindings(ViewCoffeModel);
- 	// start function that draw map, and it's content through taking an object from coffeModel
+ // ko.applyBindings(new viewCoffeModel());
+ // var ViewCoffeModel = new viewCoffeModel();
+ // ko.applyBindings(ViewCoffeModel);
+ // start function that draw map, and it's content through taking an object from coffeModel
  function MapInit() {
  	// Apply the binding
  	ko.applyBindings(new mapInit());

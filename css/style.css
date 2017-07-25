@@ -14,12 +14,24 @@ li {-webkit-transition: all .3s ease-in 0s;-moz-transition: all .3s ease-in 0s;-
   color: #38c3ea;font-weight: bold;font-family: vevey;font-size: 1.1em;letter-spacing: .15em;text-shadow: #CCC 1px 0 10px;text-transform: uppercase; line-height: 1.2em;
 }
 .search-box
-{color: #38c3ea;background-color: #ece8dd; padding-left: 5px; padding-right: 50px;margin-top: 15px;margin-left: 50%; border-radius: 7px;font-weight: bolder;font-family: RobotoLight;font-size: 1.2em;letter-spacing: .15em;line-height: 3em;}
+{color: #38c3ea;text-transform: uppercase; background-color: #ece8dd; padding-left: 5px; padding-right: 20px;margin-top: 15px;margin-left: 56%; border-radius: 5px;font-weight: bolder;font-family: RobotoLight;font-size: 1.1em;letter-spacing: .10em;line-height: 3em;}
 .search input::-webkit-input-placeholder {color: #38c3ea;}
-#map {overflow: hidden;position: relative; padding: 0;margin: 0;margin-top:30px; background-color: #fff; text-align: center;height: 600px;}
+#map {overflow: hidden;position: relative; padding: 0;margin: 0;margin-top:30px; background-color: #fff; text-align: center;height: 800px;}
 #cofeesList{
-	color: #6cc3ea;background-color: #a0785c;height: 600px;margin-top:30px;font-family: RobotoLight;font-weight:bolder;position: relative;overflow: hidden;
+	color: #6cc3ea;background-color: #a0785c;height: 800px;margin-top:30px;font-family: RobotoLight;font-weight:bolder;position: relative;overflow: hidden;
 }
 #cofeesList .items-list{
 	margin-top: 40px;text-transform: uppercase;font-size: 1.2em;background-color: #ece8dd;padding: 5px;cursor:pointer;
+}
+@media screen and (max-width: 483px) and (min-width: 372px) {
+
+    .header-title {
+       font-size: 12px;
+    }
+    #cofeesList .items-list{
+        font-size: 12px;
+    }
+    #search-box {
+         font-size: 12px;
+}
 }

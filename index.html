@@ -20,15 +20,15 @@
 		       <input  type="text" class="search-box" size="20"  data-bind="textInput: searchItem" placeholder="Search your cofee">
 		    </div>
 		   </div>
-		    <div class="col-md-9">
-              <div id="map"></div>
-            </div>
             		    <!-- start list part -->
 		    <div class="col-md-3">
 		       <ul id="cofeesList" data-bind="foreach: filteredCofee">
 		         <li class="items-list" data-bind="text: title, click:$root.clickHandler"></li>
 		       </ul>
 		    </div>
+		    <div class="col-md-9">
+              <div id="map"></div>
+            </div>
 	     </div>	
     </section>
 

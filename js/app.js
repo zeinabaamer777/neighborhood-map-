@@ -74,6 +74,8 @@
  var mapInit = function() {
  	var self = this;
  	self.searchItem = ko.observable("");
+ 	self.cofeeList = ko.observableArray([]);
+var styledMapType=new google.maps.StyledMapType([{elementType:'geometry',stylers:[{color:'#242f3e'}]},{elementType:'labels.text.stroke',stylers:[{color:'#242f3e'}]},{elementType:'labels.text.fill',stylers:[{color:'#746855'}]},{featureType:'administrative.locality',elementType:'labels.text.fill',stylers:[{color:'#d59563'}]},{featureType:'poi',elementType:'labels.text.fill',stylers:[{color:'#d59563'}]},{featureType:'poi.park',elementType:'geometry',stylers:[{color:'#263c3f'}]},{featureType:'poi.park',elementType:'labels.text.fill',stylers:[{color:'#6b9a76'}]},{featureType:'road',elementType:'geometry',stylers:[{color:'#38414e'}]},{featureType:'road',elementType:'geometry.stroke',stylers:[{color:'#212a37'}]},{featureType:'road',elementType:'labels.text.fill',stylers:[{color:'#9ca5b3'}]},{featureType:'road.highway',elementType:'geometry',stylers:[{color:'#746855'}]},{featureType:'road.highway',elementType:'geometry.stroke',stylers:[{color:'#1f2835'}]},{featureType:'road.highway',elementType:'labels.text.fill',stylers:[{color:'#f3d19c'}]},{featureType:'transit',elementType:'geometry',stylers:[{color:'#2f3948'}]},{featureType:'transit.station',elementType:'labels.text.fill',stylers:[{color:'#d59563'}]},{featureType:'water',elementType:'geometry',stylers:[{color:'#17263c'}]},{featureType:'water',elementType:'labels.text.fill',stylers:[{color:'#515c6d'}]},{featureType:'water',elementType:'labels.text.stroke',stylers:[{color:'#17263c'}]}],{name:'Night Mode'})
  	// define map with a fixed zoom & center 
  	map = new google.maps.Map(document.getElementById('map'), {
  		zoom: 7,
@@ -83,15 +85,16 @@
  			lng: 31.235712
  		},
  		mapTypeControlOptions: {
- 			style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
- 		}
+            mapTypeIds: ['roadmap', 'satellite','styled_map']
+          }
  	});
-
- 	self.cofeeList = ko.observableArray([]);
+ 	        //Associate the styled map with the MapTypeId and set it to display.
+        map.mapTypes.set('styled_map', styledMapType);
+        map.setMapTypeId('styled_map');
  	// var searchFilter = self.searchItem();
  	modelLocation.forEach(function(Item) {
  		// body...
- 		self.cofeeList.push(new Cofemodel(Item));
+ 		self.cofeeList.push(new foursquareData(Item));
  	});
  	this.filteredCofee = ko.computed(function() {
  		var searchFilter = self.searchItem();
@@ -105,6 +108,7 @@
  					return true;
  				} else {
  					return false;
+
  				}
  				// return seaRESULT;
  			});
@@ -114,9 +118,10 @@
  	// this function handle action on list to make the info window appera
  	self.clickHandler = function(cofeeList) {
  		google.maps.event.trigger(cofeeList.marker, 'click');
+ 		cofeeList.marker.setAnimation(google.maps.Animation.DROP);
  	};
  }
- var Cofemodel = function(data) {
+ var foursquareData = function(data) {
  	console.log(data);
  	var self = this;
  	self.title = data.title;
@@ -157,7 +162,8 @@
  	});
  	self.getContent = '<div class="window-content" style="background-color:#4d7b98;padding:5px;color:#fff;text-transform:uppercase; border-radius:5px;"><div class="title"><h4 style="color:#ece8dd;">' + self.title + "</h4></div>" + '<div class="extrContent"> ( ' + self.lat + ' , ' + self.lng + " ) </div>" + '<div class="extrContent"> city ->' + " " + self.city + "</div>" + '<div class="extrContent"> Street ->' + " " + self.street + "</div>" + '<div class="extrContent">' + self.checkinsCount + " checkins </div></div>"; // define infoWindow 
  	self.infoWindow = new google.maps.InfoWindow({
- 		content: ''
+ 		content: '',
+ 		maxWidth: 220 
  	});
  	google.maps.event.addDomListener(window, 'load', function() {
  		//create markers here
@@ -166,11 +172,13 @@
  			map: map,
  			title: data.title,
  			animation: google.maps.Animation.DROP,
+ 			 icon: 'images/pin-first.png'
+
  		});
  		// function to show markers on map
  		this.isVisible = ko.observable(false);
- 		this.isVisible.subscribe(function(currentState) {
- 			if (currentState) {
+ 		this.isVisible.subscribe(function(currentMark) {
+ 			if (currentMark) {
  				self.marker.setMap(map);
  			} else {
  				self.marker.setMap(null);
@@ -183,13 +191,12 @@
  			self.infoWindow.setContent(self.getContent);
  			self.infoWindow.open(map, self.marker);
  			self.marker.setAnimation(google.maps.Animation.DROP);
+ 			map.setZoom(8);
+ 			self.marker.setIcon('images/pin-second.png');
  		});
  	});
  };
- // ko.applyBindings(new viewCoffeModel());
- // var ViewCoffeModel = new viewCoffeModel();
- // ko.applyBindings(ViewCoffeModel);
- // start function that draw map, and it's content through taking an object from coffeModel
+ // ko.applyBindings(mapInit);
  function MapInit() {
  	// Apply the binding
  	ko.applyBindings(new mapInit());
